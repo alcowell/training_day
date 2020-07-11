@@ -1,0 +1,57 @@
+@startuml
+
+!define METAL #F2F2F2-D9D9D9
+!define MASTER_MARK_COLOR AAFFAA
+!define TRANSACTION_MARK_COLOR FFAA00
+
+skinparam class {
+    BackgroundColor METAL
+    BorderColor Black
+    ArrowColor Black
+}
+
+package "myapp" as target_system{
+    entity "メニュー" as menu <<U, MASTER_MARK_COLOR>>{
+        +メニューid [PK]
+        --
+        #作成者ID[FK]
+        #更新者ID[FK]
+        #画像ID[FK]
+        リプライ対象ID
+        作成日
+        更新日
+        本文
+    }
+    
+    entity "ユーザー" as user <<U,MASTER_MARK_COLOR>>{
+        +ユーザーID[PK]
+        --
+        #プロフィール画像ID[FK]
+        ユーザー名
+        ユーザーID(指定)
+        パスワード
+        自己紹介
+        誕生日
+    }
+
+    entity "画像" as image <<U, MASTER_MARK_COLOR>>{
+        +画像ID[PK]
+        --
+        画像名
+        データ
+    }
+
+    entity "いいね" as like <<U, MASTER_MARK_COLOR>>{
+        +いいねID[PK]
+        #対象ツイートID[FK]
+        #作成者ID[FK]
+    }
+}
+
+menu ||-do-o{ like
+user ||-do-o{ like
+menu }|-ri-|{ user
+image |o-do-|| menu
+image |o-do-|| user
+
+@enduml
